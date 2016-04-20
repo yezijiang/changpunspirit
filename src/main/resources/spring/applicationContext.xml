@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context ="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       ">
+    <description>spring 公共配置</description>
+    <!--以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候取出ApplicaitonContext-->
+    <bean class="com.changpu.spirit.common.springmvc.SpringContextHolder" lazy-init="false"/>
+
+    <!-- 使用annotation自动注册bean，保障springmvc的Controller注解不被初始化-->
+    <context:component-scan base-package="com.changpu.spirit">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <!-- 引入配置文件 -->
+
+    <context:property-placeholder location="classpath*:application.properties"/>
+    <!-- 数据源配置-->
+    <import resource="applicationContext-res.xml"/>
+
+    <!-- MyBatis配置 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="mapperLocations" value="classpath:sqlMap/**/*Mapper.xml" />
+    </bean>
+    <!--spring和mybatis 整合配置 扫描所有的dao-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.changpu.spirit.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+</beans>

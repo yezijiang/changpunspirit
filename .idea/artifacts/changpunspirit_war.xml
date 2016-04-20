@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="changpunspirit:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="changpu.war">
+      <element id="artifact" artifact-name="changpunspirit:war exploded" />
+    </root>
+  </artifact>
+</component>
